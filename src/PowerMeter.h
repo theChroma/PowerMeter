@@ -77,4 +77,41 @@ int main()
     std::cout << "P = " << calcRealPower(voltage, current) << std::endl;
 
 }
+
+
+
+
+
+#include <Arduino.h>
+#include <array>
+#include <iostream>
+
+constexpr uint8_t adcPin = 33;
+
+
+bool isZeroCross(uint16_t newSample)
+{
+  static uint16_t lastSample;
+  bool zeroCross = false;
+
+  if (newSample <= 2048 && lastSample > 2048)
+    zeroCross = true;
+  if (newSample >= 2048 && lastSample < 2048)
+    zeroCross = true;
+
+  lastSample = newSample;
+  
+  return zeroCross;
+}
+
+void setup()
+{
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  if(isZeroCross(analogRead(adcPin)))
+    std::cout << "Zero Cross\n";
+}
 */
