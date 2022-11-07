@@ -1,26 +1,36 @@
+/*
+- 
+- detect zero cross (first time assume zero = half adc range)
+- fill sample buffers unitl number of crossings reached
+- calculate average of buffers (zero)
+- feedback zero for next zero crossings
+*/
+
 #ifndef PowerMeter_h
 #define PowerMeter_h
 
 #include <Arduino.h>
 #include <ACPower.h>
-#include <ADConverter.h>
+#include <Sampler.h>
+#include <vector>
 
 class PowerMeter
 {
 public:
     ACPower getPower();
-    void setADC(const ADConverter& adc);
-    void calibrateVoltage(float voltageFactor);
-    void calibrateCurrent(float currentFactor);
-    void calibratePhaseShift(float phaseShift);
 
 private:
-    void detectZeroCross()
-    uint8_t m_voltagePin;
-    uint8_t m_currentPin;
-    float m_voltageFactor;
-    float m_currentFactor;
-    float m_phaseShift;
+    void measurePeriod();
+    bool detectZeroCross();
+    
+    uint8_t m_pinU;
+    uint8_t m_pinI;
+    std::vector<uint16_t> m_bufferU;
+    std::vector<uint16_t> m_bufferI;
+    uint16_t m_zeroU = 2048;
+    uint16_t m_zeroI = 2048;
+
+
 };
 
 #endif

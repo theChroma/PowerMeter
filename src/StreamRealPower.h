@@ -1,6 +1,8 @@
 #ifndef StreamRealPower_h
 #define StreamRealPower_h
 
+#include <stddef.h>
+
 class StreamRealPower
 {
 public:
